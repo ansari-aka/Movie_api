@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import { connectDB } from "../config/db.js";
 import { env } from "../config/env.js";
-import { User } from "../models/user.js";
+import { User } from "../models/User.js";
 
 await connectDB();
 
