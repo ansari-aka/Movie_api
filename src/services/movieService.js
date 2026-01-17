@@ -39,11 +39,23 @@ export async function sortedMovies({
   return { items, total, page, limit, sort: { by, order } };
 }
 
+function escapeRegex(str = "") {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 export async function searchMovies({ q = "", page = 1, limit = 12 }) {
   const skip = (page - 1) * limit;
   const hasQ = q.trim().length > 0;
-  const filter = hasQ ? { $text: { $search: q } } : {};
-  const sort = hasQ ? { score: { $meta: "textScore" } } : { _id: -1 }; // or createdAt:-1
+  const filter = hasQ
+    ? {
+        $or: [
+          { title: { $regex: escapeRegex(q.trim()), $options: "i" } },
+          { description: { $regex: escapeRegex(q.trim()), $options: "i" } },
+        ],
+      }
+    : {};
+
+  const sort = { _id: -1 };
 
   const [items, total] = await Promise.all([
     Movie.find(filter).sort(sort).skip(skip).limit(limit),
