@@ -11,7 +11,7 @@ export async function listMovies({ page = 1, limit = 12 }) {
   const skip = (page - 1) * limit;
 
   const [items, total] = await Promise.all([
-    Movie.find().sort({ imdbRank: 1, createdAt: -1 }).skip(skip).limit(limit),
+    Movie.find().sort({ _id: -1 }).skip(skip).limit(limit),
     Movie.countDocuments(),
   ]);
 
