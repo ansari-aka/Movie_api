@@ -46,7 +46,7 @@ export async function searchMovies({ q = "", page = 1, limit = 12 }) {
 
   const [items, total] = await Promise.all([
     Movie.find(filter, q ? { score: { $meta: "textScore" } } : {})
-      .sort(q ? { score: { $meta: "textScore" } } : { imdbRank: 1 })
+      .sort(q ? { score: { $meta: "textScore" } } : { createdAt: -1 })
       .skip(skip)
       .limit(limit),
     Movie.countDocuments(filter),
