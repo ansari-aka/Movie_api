@@ -41,14 +41,11 @@ export async function sortedMovies({
 
 export async function searchMovies({ q = "", page = 1, limit = 12 }) {
   const skip = (page - 1) * limit;
-
   const filter = q ? { $text: { $search: q } } : {};
+  const sort = q ? { score: { $meta: "textScore" } } : { _id: -1 }; // or createdAt:-1
 
   const [items, total] = await Promise.all([
-    Movie.find(filter, q ? { score: { $meta: "textScore" } } : {})
-      .sort(q ? { score: { $meta: "textScore" } } : { createdAt: -1 })
-      .skip(skip)
-      .limit(limit),
+    Movie.find(filter).sort(sort).skip(skip).limit(limit),
     Movie.countDocuments(filter),
   ]);
 
