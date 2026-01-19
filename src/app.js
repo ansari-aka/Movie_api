@@ -11,7 +11,7 @@ import { notFound, errorHandler } from "./middleware/errorHandler.js";
 
 export const app = express();
 
-app.set("trust proxy", 1);
+app.set("trust proxy", 2);
 
 // Rate limiter
 const limiter = rateLimit({
