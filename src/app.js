@@ -15,7 +15,7 @@ app.set("trust proxy", 2);
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max:2000, 
+  max: 2000,
   standardHeaders: true,
   legacyHeaders: false,
 });
@@ -24,7 +24,7 @@ app.use(helmet());
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json({ limit: "1mb" }));
 app.use(morgan("dev"));
-app.use(rateLimit(limiter));
+app.use(limiter);
 
 app.get("/health", (req, res) => res.json({ ok: true }));
 
