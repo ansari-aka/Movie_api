@@ -46,6 +46,64 @@ Provides authentication, role-based authorization, movie management APIs, and a 
 
 ---
 
+## Backend API Endpoints
+
+### Authentication
+- **POST** `/auth/signup`  
+  → Register a new user (default role: `user`)
+- **POST** `/auth/login`  
+  → Login user/admin and receive JWT
+
+---
+
+### Movies (Public)
+- **GET** `/movies`  
+  → Get all movies (pagination supported)
+
+- **GET** `/movies/sorted`  
+  → Get movies sorted by field  
+  **Query params:**  
+  `by=title | rating | releaseDate | durationMinutes`  
+  `order=asc | desc`  
+  `page`, `limit`
+
+- **GET** `/movies/search`  
+  → Search movies by title or description  
+  **Query params:**  
+  `q`, `page`, `limit`
+
+---
+
+### Movies (Admin Only)
+> Requires header:  
+> `Authorization: Bearer <JWT>`
+
+- **POST** `/movies`  
+  → Add a new movie
+
+- **PUT** `/movies/:id`  
+  → Edit existing movie
+
+- **DELETE** `/movies/:id`  
+  → Delete movie
+
+- **POST** `/movies/bulk`  
+  → Bulk upload movies (lazy insertion via Redis queue)
+
+---
+
+### Utility
+- **GET** `/health`  
+  → API health check
+
+---
+
+### Access Control Summary
+- Public: `GET` movie endpoints
+- Protected: `POST / PUT / DELETE`
+- Admin-only: movie creation, update, delete, bulk upload
+
+
 ## Requirements
 
 - Node.js **18+**
@@ -69,6 +127,7 @@ MONGO_URI=mongodb+srv://<user>:<pass>@cluster.mongodb.net/moviesdb
 JWT_SECRET=supersecret
 JWT_EXPIRES_IN=7d
 ```
+
 ### 3.Start API server
 
 ```
